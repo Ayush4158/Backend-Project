@@ -1,0 +1,4 @@
+1. Project setup
+2. Mongodb setup
+3. Adding databaase url to env and add db name to cosntant
+4. Database connection
