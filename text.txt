@@ -4,3 +4,4 @@
 4. Database connection
 5. async wrapper and coustum apiresponse and apierror
 6. models(user and video) with hooks and JWT   package(mongoose-aggregate-paginate , bcrypt, jsonwebtoken)
+7. MULTER(How to upload file)  package(cloudinary , multer or express file upload)
