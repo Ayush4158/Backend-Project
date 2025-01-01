@@ -116,11 +116,13 @@ const loginUser = asyncHandler(async (req,res) => {
   //5.access and refresh token generation
   //6.send cookie
 
-  const {username, email, password} = req.body
+  const {email,username, password} = req.body
+  console.log(email)
 
-  if(!username || !email){
+  if(!username && !email){
     throw new ApiError(400, "username or email is required")
   }
+
 
   const user = await User.findOne({
     $or: [{username}, {email}]
@@ -132,6 +134,7 @@ const loginUser = asyncHandler(async (req,res) => {
 
   const isPasswordValid = await user.isPasswordCorrect(password)
 
+  // console.log(isPasswordValid)
   if(!isPasswordValid){
     throw new ApiError(401, "Invalid user credentials")
   }
@@ -144,7 +147,7 @@ const loginUser = asyncHandler(async (req,res) => {
     secure: true
   }
 
-  return res.status(200).cookie("asscessToken" , accessToken, options).cookie("refreshToken", refreshToken, options).json(
+  return res.status(200).cookie("accessToken" , accessToken, options).cookie("refreshToken", refreshToken, options).json(
     new ApiResponse(
       200,
       {
@@ -155,6 +158,7 @@ const loginUser = asyncHandler(async (req,res) => {
   )
   
 })
+
 
 const logoutUser = asyncHandler(async(req,res) => {
   await User.findByIdAndUpdate(
