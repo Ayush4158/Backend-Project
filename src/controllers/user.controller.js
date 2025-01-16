@@ -238,6 +238,10 @@ const refreshAccessToken = asyncHandler(async (req,res) => {
 const changeCurrentPassword = asyncHandler (async (req, res)=>{
   const {oldPassword, newPassword , confirmNewPassword} = req.body
 
+  if(newPassword !== confirmNewPassword){
+    throw new ApiError(401, "confirm password should be equal to new Password")
+  }
+
   const user = await User.findById(req.user?._id)
 
   const passwordCheck = await user.isPasswordCorrect(oldPassword)
@@ -463,6 +467,36 @@ const getWatchHistory = asyncHandler( async(req,res) => {
   .json(new ApiResponse(200, user[0].watchHistory , "Watch history fetched successfully"))
 })
 
+const addVideoToHistory = asyncHandler (async (req,res) => {
+  const { videoId } = req.params
+  const user = await User.findById(req.user?._id)
+
+  if(!user){
+    throw new ApiError(404, "user not found")
+  }
+
+  const watchHistoryTillNow = user.watchHistory
+
+  if(!watchHistoryTillNow.includes(videoId)){
+    const pushVideo = await User.findByIdAndUpdate(
+      {
+        _id : req.user?._id
+      },
+      {
+        $push: {
+          watchHistory: videoId
+        }
+      }
+    )
+  }else{
+    throw new ApiError(409, "video already exist in history")
+  }
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, "Video added to watch history successfully"))
+})
+
 export {
   registerUser,
   loginUser, 
@@ -474,5 +508,6 @@ export {
   updateAvatar, 
   updateCoverImage, 
   getUserChannelProfile, 
-  getWatchHistory
+  getWatchHistory,
+  addVideoToHistory
 }
