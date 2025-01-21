@@ -3,6 +3,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { User } from "../models/user.models.js";
 import {Tweet} from "../models/tweet.models.js"
 import { asyncHandler } from "../utils/asyncHandler.js";
+import mongoose from "mongoose";
 
 const createTweet = asyncHandler(async(req,res) => {
   const user = await User.findById(req.user?._id)
@@ -27,7 +28,7 @@ const createTweet = asyncHandler(async(req,res) => {
 })
 
 const getUserTweets = asyncHandler (async(req,res) => {
-  const {userId} = body.params
+  const {userId} = req.params
 
   const tweets = await Tweet.aggregate([
     {
@@ -39,7 +40,7 @@ const getUserTweets = asyncHandler (async(req,res) => {
 
   return res
     .status(200)
-    .json(new ApiResponse(200, tweets, "successfully got" ))
+    .json(new ApiResponse(200, tweets, "successfully fetched users tweet" ))
 })
 
 const updateTweet = asyncHandler(async(req,res) => {
