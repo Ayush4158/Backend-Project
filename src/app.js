@@ -21,6 +21,7 @@ import subscriptionRouter from './routes/subscription.routes.js'
 import tweetRouter from './routes/tweet.routes.js'
 import commentRouter from './routes/comment.routes.js'
 import playlistRouter from './routes/playlist.routes.js'
+import dashbordRouter from './routes/dashbord.routes.js'
 
 app.get("/",(req,res) => res.send("server is running"))
 app.post("/log", (req, res) => {
@@ -35,7 +36,8 @@ app.use("/api/v1/tweet", tweetRouter)
 app.use("/api/v1/subscription" , subscriptionRouter)
 app.use("/api/v1/comment" , commentRouter)
 app.use("/api/v1/like", likeRouter)
-app.use("api/v1/plalist", playlistRouter)
+app.use("/api/v1/plalist", playlistRouter)
+app.use("/api/v1/dashbord", dashbordRouter)
 
 
 
